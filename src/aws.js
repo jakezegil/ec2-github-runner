@@ -67,14 +67,14 @@ async function startEc2Instance(label, githubRegistrationToken) {
 
   const userData = buildUserDataScript(githubRegistrationToken, label);
 
-  const params = {
+  const modifyParams = {
     InstanceIds: [config.input.ec2InstanceId],
     Attribute: 'userData',
-    UserData: Buffer.from(userData.join('\n')).toString('base64'),
+    UserData: Buffer.from(userData.join('\n')),
   };
 
   try {
-    const result = await ec2.modifyInstanceAttribute(params).promise();
+    const result = await ec2.modifyInstanceAttribute(modifyParams).promise();
     const ec2InstanceId = result.Instances[0].InstanceId;
     core.info(`User data set for AWS EC2 instance ${ec2InstanceId}`);
   } catch (error) {
@@ -82,8 +82,12 @@ async function startEc2Instance(label, githubRegistrationToken) {
     throw error;
   }
 
+  const startParams = {
+    InstanceIds: [config.input.ec2InstanceId],
+  };
+
   try {
-    const result = await ec2.startInstances(params).promise();
+    const result = await ec2.startInstances(startParams).promise();
     const ec2InstanceId = result.Instances[0].InstanceId;
     core.info(`AWS EC2 instance ${ec2InstanceId} is started`);
     return ec2InstanceId;
