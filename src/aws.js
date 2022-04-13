@@ -69,8 +69,9 @@ async function startEc2Instance(label, githubRegistrationToken) {
 
   const modifyParams = {
     InstanceIds: [config.input.ec2InstanceId],
-    Attribute: 'userData',
-    UserData: Buffer.from(userData.join('\n')),
+    UserData: {
+      Value: Buffer.from(userData.join('\n')),
+    },
   };
 
   try {
