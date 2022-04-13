@@ -75,9 +75,8 @@ async function startEc2Instance(label, githubRegistrationToken) {
   };
 
   try {
-    const result = await ec2.modifyInstanceAttribute(modifyParams).promise();
-    const ec2InstanceId = result.Instances[0].InstanceId;
-    core.info(`User data set for AWS EC2 instance ${ec2InstanceId}`);
+    await ec2.modifyInstanceAttribute(modifyParams).promise();
+    core.info(`User data set for AWS EC2 instance ${config.input.ec2InstanceId}`);
   } catch (error) {
     core.error('AWS EC2 instance modify userData error... verify the instance is stopped before running CD');
     throw error;
