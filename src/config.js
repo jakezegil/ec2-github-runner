@@ -28,6 +28,9 @@ class Config {
       repo: github.context.repo.repo,
     };
 
+    console.log(this.githubContext);
+    core.info(`Github Context: ${this.githubContext}`);
+
     //
     // validate input
     //
